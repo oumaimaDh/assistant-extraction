@@ -17,9 +17,6 @@
             font-family: 'Inter', sans-serif;
             padding: 1rem;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             position: relative;
         }
         body::before {
@@ -64,8 +61,7 @@
             border: 1px solid rgba(182, 171, 109, 0.35);
             display: flex;
             flex-direction: column;
-            height: calc(100vh - 2rem);
-            max-height: 700px;
+            height: 650px; /* Fixe sur desktop */
         }
         .glass-card:hover {
             transform: translateY(-3px);
@@ -283,7 +279,7 @@
         .footer-note {
             text-align: center;
             font-size: 0.65rem;
-            margin-top: 0.8rem;
+            margin-top: 1rem;
             color: #AAAA7F;
             grid-column: span 2;
         }
@@ -306,6 +302,7 @@
             0%, 100% { opacity: 0.3; }
             50% { opacity: 1; }
         }
+        /* Mobile : les cartes s'empilent et prennent une hauteur auto */
         @media (max-width: 850px) {
             .dashboard {
                 grid-template-columns: 1fr;
@@ -313,7 +310,7 @@
             }
             .glass-card {
                 height: auto;
-                max-height: 550px;
+                max-height: none;
             }
             body {
                 padding: 0.8rem;
@@ -323,26 +320,26 @@
 </head>
 <body>
 <div class="dashboard">
-    <!-- CHATBOT -->
+    <!-- CHATBOT CARD -->
     <div class="glass-card">
         <div class="card-header">
             <i class="fas fa-robot"></i>
-            <h2>Dar El Zit · Zitouni AI Chatbot</h2>
-            <p>🧠 huilier IA</p>
+            <h2>Zitouna · IA</h2>
+            <p>🧠 huilier tunisien</p>
         </div>
         <div class="chat-messages" id="chatMessages">
             <div class="message assistant">
                 <div class="message-avatar"><i class="fas fa-leaf"></i></div>
-                <div class="message-bubble">🌿 Salām ! Je suis ton expert en huile d'olive, mais aussi un compagnon sympa. Parle-moi d'olives, de cuisine ou juste dis bonjour – je réponds avec le cœur. Alors, qu'est-ce qui t'amène ?</div>
+                <div class="message-bubble">🌿 أهلا وسهلا ! Je suis Zitouna, ton expert en huile d'olive. Parle-moi d'or vert, de dégustation ou dis juste bonjour — je suis là pour toi.</div>
             </div>
         </div>
         <div class="chat-input-area">
-            <input type="text" id="chatInput" placeholder="Dis-moi tout... ">
+            <input type="text" id="chatInput" placeholder="Écris ton message...">
             <button id="sendChatBtn"><i class="fas fa-feather-alt"></i></button>
         </div>
     </div>
 
-    <!-- QUIZ -->
+    <!-- QUIZ CARD -->
     <div class="glass-card">
         <div class="card-header">
             <i class="fas fa-olive-branch"></i>
@@ -359,7 +356,7 @@
                 <div class="options-list" id="optionsList"></div>
                 <div class="quiz-buttons">
                     <button class="quiz-btn" id="prevBtn"><i class="fas fa-arrow-left"></i> Préc.</button>
-                    <button class="quiz-btn primary" id="nextBtn">Suivant <i class="fas fa-arrow-right"></i></button>
+                    <button class="quiz-btn primary" id="nextBtn">Suivant →</button>
                     <button class="quiz-btn" id="resetQuizBtn"><i class="fas fa-sync-alt"></i> Refaire</button>
                 </div>
                 <div id="quizResult" class="result-area" style="display: none;"></div>
@@ -367,13 +364,13 @@
         </div>
     </div>
     <div class="footer-note">
-        <i class="fas fa-seedling"></i> Dar El Zit
+        <i class="fas fa-seedling"></i> Zitouna · l'âme de l'oliveraie tunisienne
     </div>
 </div>
 
 <script>
-    // ---------- REPLACE WITH YOUR NEW API KEY ----------
-    const API_KEY = "AIzaSyCm7r1rjw8rneY08s7A2lVN0-7YYcciKMI";
+    // ---------- REMPLACE PAR TA VRAIE CLÉ API ----------
+    const API_KEY = "VOTRE_NOUVELLE_CLE_API_ICI";
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
 
     // DOM elements
@@ -419,37 +416,26 @@
         if (el) el.remove();
     }
 
-    // New, friendlier system prompt: accepts greetings & small talk, but refuses completely unrelated topics (sports, politics, etc.)
     async function getFriendlyAIResponse(question) {
         if (!question.trim()) return "Dis-moi quelque chose, je t'écoute !";
-        const systemPrompt = `Tu es un expert en huile d'olive, mais aussi un compagnon chaleureux. Tu travailles pour Dar El Zit en Tunisie.
-RÈGLES :
-- Si l'utilisateur te dit bonjour, comment ça va, ou fait du small talk (météo, compliments, etc.), réponds de façon naturelle, amicale et courte. Tu peux ensuite rediriger vers l'huile d'olive si tu veux, mais ce n'est pas obligatoire.
-- Si l'utilisateur pose une question sur l'huile d'olive (extraction, qualité, conservation, dégustation, variétés, etc.), réponds avec précision, en 2 à 4 phrases, donne des chiffres clés (températures, acidité, etc.).
-- Si l'utilisateur parle d'un sujet TOTALEMENT ÉTRANGER à l'olive, à la cuisine méditerranéenne ou à l'alimentation (ex: sport, politique, actualités générales, technologie hors alimentation), alors réponds gentiment : "Désolé, je suis surtout calé sur l'huile d'olive et les bonnes choses de la vie. Mais je peux te parler d'olives, de dégustation ou de recettes si tu veux !"
-- Sois toujours poli, détendu, et utilise parfois des émojis.
-- Ton nom est Zitouni
-
+        const systemPrompt = `Tu es Zitouna, un expert tunisien en huile d'olive, mais aussi un compagnon chaleureux. Tu parles français avec quelques mots d'arabe tunisien (أهلا, برشة, etc.). Règles :
+- Si l'utilisateur dit bonjour, comment ça va, ou fait du small talk, réponds de façon naturelle, amicale et courte.
+- Si l'utilisateur pose une question sur l'huile d'olive (extraction, qualité, conservation, dégustation, variétés comme Chemlali, etc.), réponds avec précision, 2 à 4 phrases, donne des chiffres clés (températures, acidité).
+- Si l'utilisateur parle d'un sujet totalement étranger (sport, politique, technologie hors alimentation), réponds gentiment : "Désolé, je suis spécialisé dans l'or vert tunisien. Mais je peux te parler d'olives ou de recettes si tu veux !"
+- Sois détendu, utilise parfois des émojis.
 Question: ${question}`;
-
         try {
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: systemPrompt }] }]
-                })
+                body: JSON.stringify({ contents: [{ parts: [{ text: systemPrompt }] }] })
             });
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.error?.message || "Erreur API");
-            }
+            if (!response.ok) throw new Error(await response.text());
             const data = await response.json();
-            let answer = data.candidates[0].content.parts[0].text;
-            return answer;
+            return data.candidates[0].content.parts[0].text;
         } catch (error) {
             console.error(error);
-            return `❌ Oups, problème technique : ${error.message}. Vérifie ta clé API ou réessaie plus tard. 🌿`;
+            return `❌ Oups, problème technique : ${error.message}. Vérifie ta clé API. 🌿`;
         }
     }
 
@@ -467,34 +453,24 @@ Question: ${question}`;
     sendBtn.addEventListener('click', sendUserMessage);
     chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendUserMessage(); });
 
-    // ---------- QUIZ (unchanged, works perfectly) ----------
+    // ---------- QUIZ (identique) ----------
     const quizData = [
-        { text: "🌡️ Quelle température idéale pour le malaxage (préservation des polyphénols) ?", options: ["10-15°C", "18-24°C", "27-32°C", "35-40°C"], correct: 1 },
-        { text: "🏺 Quel système d'extraction donne l'huile la plus riche en polyphénols ?", options: ["3 phases avec eau", "2 phases sans eau", "Pressoir en pierre", "Extraction solvant"], correct: 1 },
-        { text: "🔬 Acidité max pour une extra vierge premium ?", options: ["0,8%", "1,5%", "2,0%", "0,3%"], correct: 0 },
-        { text: "🍃 Quel défaut indique une mauvaise fermentation des olives ?", options: ["Amer", "Piquant", "Moisi/humide", "Fruité vert"], correct: 2 },
-        { text: "⏳ Meilleure conservation après extraction ?", options: ["Bouteille transparente au soleil", "Citerne inox + azote, obscurité", "Baril plastique", "Fût de chêne"], correct: 1 }
+        { text: "🌡️ Température idéale pour le malaxage (polyphénols) ?", options: ["10-15°C", "18-24°C", "27-32°C", "35-40°C"], correct: 1 },
+        { text: "🏺 Système d'extraction le plus riche en polyphénols ?", options: ["3 phases avec eau", "2 phases sans eau", "Pressoir pierre", "Solvant"], correct: 1 },
+        { text: "🔬 Acidité max pour extra vierge premium ?", options: ["0,8%", "1,5%", "2,0%", "0,3%"], correct: 0 },
+        { text: "🍃 Défaut sensoriel = mauvaise fermentation ?", options: ["Amer", "Piquant", "Moisi/humide", "Fruité vert"], correct: 2 },
+        { text: "⏳ Meilleure conservation après extraction ?", options: ["Bouteille transparente soleil", "Citerne inox + azote, obscurité", "Baril plastique", "Fût chêne"], correct: 1 }
     ];
 
-    let currentQIndex = 0;
-    let userAnswers = new Array(quizData.length).fill(null);
-    let quizCompleted = false;
-
-    const questionTextElem = document.getElementById('questionText');
-    const optionsListElem = document.getElementById('optionsList');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const resetQuizBtn = document.getElementById('resetQuizBtn');
-    const scoreDisplaySpan = document.getElementById('scoreDisplay');
-    const quizResultDiv = document.getElementById('quizResult');
+    let currentQIndex = 0, userAnswers = new Array(quizData.length).fill(null), quizCompleted = false;
+    const questionTextElem = document.getElementById('questionText'), optionsListElem = document.getElementById('optionsList');
+    const prevBtn = document.getElementById('prevBtn'), nextBtn = document.getElementById('nextBtn'), resetQuizBtn = document.getElementById('resetQuizBtn');
+    const scoreDisplaySpan = document.getElementById('scoreDisplay'), quizResultDiv = document.getElementById('quizResult');
 
     function updateScoreDisplay() {
         let score = 0;
-        for (let i = 0; i < quizData.length; i++) {
-            if (userAnswers[i] !== null && userAnswers[i] === quizData[i].correct) score++;
-        }
+        for (let i = 0; i < quizData.length; i++) if (userAnswers[i] === quizData[i].correct) score++;
         scoreDisplaySpan.innerText = `Score: ${score} / ${quizData.length}`;
-        return score;
     }
 
     function renderCurrentQuestion() {
@@ -507,10 +483,7 @@ Question: ${question}`;
             const optionDiv = document.createElement('div');
             optionDiv.className = `option ${isChecked ? 'selected' : ''}`;
             const radioId = `opt_${currentQIndex}_${idx}`;
-            optionDiv.innerHTML = `
-                <input type="radio" name="quizOption" value="${idx}" id="${radioId}" ${isChecked ? 'checked' : ''}>
-                <label for="${radioId}" style="flex:1; cursor:pointer;">${opt}</label>
-            `;
+            optionDiv.innerHTML = `<input type="radio" name="quizOption" value="${idx}" id="${radioId}" ${isChecked ? 'checked' : ''}><label for="${radioId}" style="flex:1; cursor:pointer;">${opt}</label>`;
             const radio = optionDiv.querySelector('input');
             radio.addEventListener('change', () => {
                 if (radio.checked) {
@@ -520,33 +493,26 @@ Question: ${question}`;
                     updateScoreDisplay();
                 }
             });
-            optionDiv.addEventListener('click', (e) => {
-                if (e.target.tagName !== 'INPUT') {
-                    radio.checked = true;
-                    radio.dispatchEvent(new Event('change'));
-                }
-            });
+            optionDiv.addEventListener('click', (e) => { if (e.target.tagName !== 'INPUT') { radio.checked = true; radio.dispatchEvent(new Event('change')); } });
             optionsListElem.appendChild(optionDiv);
         });
         prevBtn.disabled = (currentQIndex === 0);
-        if (currentQIndex === quizData.length - 1) nextBtn.innerHTML = '🏆 Terminer';
-        else nextBtn.innerHTML = 'Suivant →';
+        nextBtn.innerHTML = (currentQIndex === quizData.length - 1) ? '🏆 Terminer' : 'Suivant →';
         quizResultDiv.style.display = 'none';
     }
 
     function showFinalResults() {
         quizCompleted = true;
-        let score = 0;
-        let details = '';
+        let score = 0, details = '';
         for (let i = 0; i < quizData.length; i++) {
-            const isCorrect = (userAnswers[i] !== null && userAnswers[i] === quizData[i].correct);
+            const isCorrect = (userAnswers[i] === quizData[i].correct);
             if (isCorrect) score++;
             const userChoice = userAnswers[i] !== null ? quizData[i].options[userAnswers[i]] : "Pas de réponse";
             const correctAns = quizData[i].options[quizData[i].correct];
             details += `<div style="margin-bottom:10px; border-bottom:1px solid #ddd6c6; padding-bottom:6px;"><strong>❓ ${quizData[i].text}</strong><br>✅ ${correctAns}<br>${isCorrect ? '✔️ Toi : ' + userChoice : '❌ Toi : ' + userChoice}</div>`;
         }
         const percent = Math.round((score/quizData.length)*100);
-        let medal = percent === 100 ? "🏆 MAÎTRE ABSOLU !" : (percent>=80 ? "🌟 Expert, presque parfait." : (percent>=60 ? "🍈 Bonne base !" : "🌿 Revois les bases avec l'IA."));
+        let medal = percent === 100 ? "🏆 MAÎTRE ABSOLU !" : (percent>=80 ? "🌟 Expert !" : (percent>=60 ? "🍈 Bonne base !" : "🌿 Revois les bases."));
         quizResultDiv.innerHTML = `<i class="fas fa-olive" style="font-size:1.5rem;"></i><h3>Score : ${score}/${quizData.length} (${percent}%)</h3><p>${medal}</p><div style="max-height:180px; overflow:auto; text-align:left; font-size:0.75rem;">${details}</div><button id="retakeQuizBtn" class="quiz-btn primary" style="margin-top:12px;">⟳ Refaire</button>`;
         quizResultDiv.style.display = 'block';
         questionTextElem.style.display = 'none';
@@ -558,29 +524,14 @@ Question: ${question}`;
     }
 
     function resetQuiz() {
-        userAnswers.fill(null);
-        currentQIndex = 0;
-        quizCompleted = false;
-        questionTextElem.style.display = 'block';
-        optionsListElem.style.display = 'flex';
-        prevBtn.style.display = 'inline-flex';
-        nextBtn.style.display = 'inline-flex';
-        resetQuizBtn.style.display = 'inline-flex';
-        quizResultDiv.style.display = 'none';
-        updateScoreDisplay();
-        renderCurrentQuestion();
+        userAnswers.fill(null); currentQIndex = 0; quizCompleted = false;
+        questionTextElem.style.display = 'block'; optionsListElem.style.display = 'flex';
+        prevBtn.style.display = 'inline-flex'; nextBtn.style.display = 'inline-flex'; resetQuizBtn.style.display = 'inline-flex';
+        quizResultDiv.style.display = 'none'; updateScoreDisplay(); renderCurrentQuestion();
     }
-
-    function nextQuestion() {
-        if (quizCompleted) return;
-        if (currentQIndex < quizData.length - 1) { currentQIndex++; renderCurrentQuestion(); }
-        else showFinalResults();
-    }
+    function nextQuestion() { if (!quizCompleted) { if (currentQIndex < quizData.length-1) { currentQIndex++; renderCurrentQuestion(); } else showFinalResults(); } }
     function prevQuestion() { if (!quizCompleted && currentQIndex > 0) { currentQIndex--; renderCurrentQuestion(); } }
-
-    nextBtn.addEventListener('click', nextQuestion);
-    prevBtn.addEventListener('click', prevQuestion);
-    resetQuizBtn.addEventListener('click', resetQuiz);
+    nextBtn.addEventListener('click', nextQuestion); prevBtn.addEventListener('click', prevQuestion); resetQuizBtn.addEventListener('click', resetQuiz);
     resetQuiz();
 </script>
 </body>

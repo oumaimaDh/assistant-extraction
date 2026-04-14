@@ -2,8 +2,10 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dar El Zit - IA Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Oleum Divinum | AI Oracle & Quiz — Green Gold</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -11,202 +13,575 @@
             box-sizing: border-box;
         }
         body {
-            font-family: system-ui, 'Segoe UI', 'Inter', sans-serif;
-            background: linear-gradient(135deg, #e8f3e5 0%, #c8e0c4 100%);
+            background: radial-gradient(circle at 10% 30%, #020301 0%, #1e2a1a 100%);
+            font-family: 'Inter', sans-serif;
+            padding: 1rem;
             min-height: 100vh;
-            padding: 20px;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            position: relative;
         }
-        .card {
-            max-width: 800px;
+        body::before {
+            content: "🌿";
+            font-size: 280px;
+            position: fixed;
+            bottom: -40px;
+            right: -40px;
+            opacity: 0.08;
+            pointer-events: none;
+            transform: rotate(15deg);
+            color: #B6AB6D;
+        }
+        body::after {
+            content: "🫒";
+            font-size: 200px;
+            position: fixed;
+            top: -30px;
+            left: -30px;
+            opacity: 0.07;
+            pointer-events: none;
+            transform: rotate(-10deg);
+            color: #ADD6AB;
+        }
+        .dashboard {
+            max-width: 1400px;
             width: 100%;
-            background: #ffffff;
-            border-radius: 48px;
-            box-shadow: 0 25px 45px -12px rgba(0, 32, 0, 0.25);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+        .glass-card {
+            background: rgba(250, 245, 226, 0.94);
+            backdrop-filter: blur(2px);
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.4);
             overflow: hidden;
             transition: transform 0.2s ease;
-        }
-        .hero {
-            background: linear-gradient(120deg, #1f4f1f, #2a6b2a);
-            padding: 32px 24px;
-            text-align: center;
-            color: white;
-        }
-        .hero i {
-            font-size: 52px;
-            filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.2));
-        }
-        .hero h1 {
-            font-size: 2rem;
-            margin: 12px 0 6px;
-            font-weight: 700;
-            letter-spacing: -0.3px;
-        }
-        .hero p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            font-weight: 400;
-        }
-        .content {
-            padding: 32px;
-        }
-        .question-area {
+            border: 1px solid rgba(182, 171, 109, 0.35);
             display: flex;
+            flex-direction: column;
+            height: calc(100vh - 2rem);
+            max-height: 700px;
+        }
+        .glass-card:hover {
+            transform: translateY(-3px);
+        }
+        .card-header {
+            background: linear-gradient(135deg, #253224, #184709);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
             gap: 12px;
-            margin-bottom: 28px;
-            flex-wrap: wrap;
+            border-bottom: 2px solid #B6AB6D;
+            flex-shrink: 0;
         }
-        .question-area input {
-            flex: 1;
-            padding: 16px 22px;
-            border: 1.5px solid #cde2cd;
-            border-radius: 60px;
-            font-size: 1rem;
-            font-family: inherit;
-            background: #fefef9;
-            transition: all 0.2s;
+        .card-header i {
+            font-size: 1.8rem;
+            color: #FFDFF6;
         }
-        .question-area input:focus {
-            outline: none;
-            border-color: #2a6b2a;
-            box-shadow: 0 0 0 3px rgba(42,107,42,0.2);
-        }
-        .question-area button {
-            background: #2a6b2a;
-            border: none;
-            padding: 0 32px;
-            border-radius: 60px;
-            color: white;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            letter-spacing: 0.3px;
-        }
-        .question-area button:hover {
-            background: #1f4f1f;
-            transform: scale(1.02);
-            box-shadow: 0 6px 14px rgba(0,32,0,0.2);
-        }
-        .answer-panel {
-            background: #f9fdf7;
-            border-radius: 32px;
-            padding: 26px;
-            border-left: 8px solid #3c8c3c;
-            box-shadow: 0 5px 12px rgba(0,0,0,0.03);
-        }
-        .answer-header {
+        .card-header h2 {
+            font-family: 'Cormorant Garamond', serif;
             font-weight: 700;
-            color: #2a6b2a;
-            margin-bottom: 14px;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 1.5rem;
+            color: #FAF5E2;
+            margin: 0;
         }
-        .answer-content {
-            font-size: 1rem;
-            line-height: 1.55;
-            color: #1c2e1a;
-            white-space: pre-wrap;
-        }
-        .footer {
+        .card-header p {
             font-size: 0.7rem;
-            text-align: center;
-            margin-top: 28px;
-            color: #7a9a76;
-            border-top: 1px solid #d9e8d6;
-            padding-top: 20px;
+            color: #ADD6AB;
+            margin-left: auto;
+            font-weight: 500;
         }
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
+        /* Chat area */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            background: #FAF5E2;
+        }
+        .message {
+            display: flex;
+            gap: 10px;
+            animation: fadeSlideUp 0.2s ease;
+        }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(8px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            background: #2E3615;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FAF5E2;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .user .message-avatar {
+            background: #747439;
+        }
+        .message-bubble {
+            background: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            border-top-left-radius: 4px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: #1e2a1a;
+            max-width: 85%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8cf;
+        }
+        .user .message-bubble {
+            background: #eef5ea;
+            border-bottom-right-radius: 4px;
+            border-left: 3px solid #89C63D;
+        }
+        .assistant .message-bubble {
+            background: #ffffffea;
+            border-left: 3px solid #B6AB6D;
+        }
+        .chat-input-area {
+            padding: 0.8rem 1.2rem 1rem;
+            background: #fefcf2;
+            border-top: 1px solid #D9E0C5;
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .chat-input-area input {
+            flex: 1;
+            border: 1.5px solid #AAAA7F;
+            border-radius: 40px;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            background: white;
+        }
+        .chat-input-area input:focus {
+            border-color: #89C63D;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(137,198,61,0.2);
+        }
+        .chat-input-area button {
+            background: #184709;
+            border: none;
+            width: 44px;
+            border-radius: 40px;
+            color: #FAF5E2;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+        /* Quiz area */
+        .quiz-container {
+            flex: 1;
+            padding: 1rem 1.2rem;
+            background: #FAF5E2;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            border-bottom: 2px dashed #B6AB6D;
+            padding-bottom: 0.5rem;
+            flex-shrink: 0;
+        }
+        .quiz-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #253224;
+        }
+        .quiz-score-badge {
+            background: #2E3615;
+            padding: 4px 12px;
+            border-radius: 40px;
+            color: #FAF5E2;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #184709;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+        .option {
+            background: white;
+            border: 1.5px solid #AAAA7F;
+            border-radius: 60px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .option.selected {
+            background: #e1f0d4;
+            border-color: #89C63D;
+        }
+        .option input {
+            accent-color: #184709;
+            width: 16px;
+            height: 16px;
+        }
+        .quiz-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            flex-shrink: 0;
+        }
+        .quiz-btn {
+            background: #747439;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: #FAF5E2;
+            cursor: pointer;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .quiz-btn.primary {
+            background: #184709;
+        }
+        .result-area {
+            margin-top: 1rem;
+            background: #ffffffc9;
+            border-radius: 24px;
+            padding: 12px;
+            text-align: center;
+            border-left: 4px solid #89C63D;
+            font-size: 0.8rem;
+        }
+        .footer-note {
+            text-align: center;
+            font-size: 0.65rem;
+            margin-top: 0.8rem;
+            color: #AAAA7F;
+            grid-column: span 2;
+        }
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 6px 12px;
+            background: #e9f0e3;
+            border-radius: 20px;
+            width: fit-content;
+        }
+        .typing-indicator span {
+            width: 6px;
+            height: 6px;
+            background: #747439;
+            border-radius: 50%;
+            animation: blink 1.2s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        @media (max-width: 850px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .glass-card {
+                height: auto;
+                max-height: 550px;
+            }
+            body {
+                padding: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
-<div class="card">
-    <div class="hero">
-        <i class="fas fa-robot"></i>
-        <h1>Dar El Zit IA</h1>
-        <p>Assistant intelligent – Posez n’importe quelle question</p>
+<div class="dashboard">
+    <!-- CHATBOT -->
+    <div class="glass-card">
+        <div class="card-header">
+            <i class="fas fa-robot"></i>
+            <h2>Dar El Zit · Zitouni AI Chatbot</h2>
+            <p>🧠 huilier IA</p>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message assistant">
+                <div class="message-avatar"><i class="fas fa-leaf"></i></div>
+                <div class="message-bubble">🌿 Salām ! Je suis ton expert en huile d'olive, mais aussi un compagnon sympa. Parle-moi d'olives, de cuisine ou juste dis bonjour – je réponds avec le cœur. Alors, qu'est-ce qui t'amène ?</div>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Dis-moi tout... ">
+            <button id="sendChatBtn"><i class="fas fa-feather-alt"></i></button>
+        </div>
     </div>
-    <div class="content">
-        <div class="question-area">
-            <input type="text" id="questionInput" placeholder="Ex: Quelle est la température idéale de malaxage ?">
-            <button id="askBtn">Envoyer</button>
+
+    <!-- QUIZ -->
+    <div class="glass-card">
+        <div class="card-header">
+            <i class="fas fa-olive-branch"></i>
+            <h2>Le Défi Vert</h2>
+            <p>🏆 quiz</p>
         </div>
-        <div class="answer-panel">
-            <div class="answer-header">
-                <span>🧠 Réponse IA</span>
+        <div class="quiz-container" id="quizContainer">
+            <div class="quiz-header">
+                <div class="quiz-title">🍈 Maîtrise de l'olivier</div>
+                <div class="quiz-score-badge" id="scoreDisplay">Score: 0 / 5</div>
             </div>
-            <div class="answer-content" id="answerDisplay">
-                Posez votre question sur l’extraction d’huile d’olive, les procédés, la qualité, le stockage...
+            <div id="quizDynamicArea" style="flex:1; display: flex; flex-direction: column;">
+                <div class="question-text" id="questionText"></div>
+                <div class="options-list" id="optionsList"></div>
+                <div class="quiz-buttons">
+                    <button class="quiz-btn" id="prevBtn"><i class="fas fa-arrow-left"></i> Préc.</button>
+                    <button class="quiz-btn primary" id="nextBtn">Suivant <i class="fas fa-arrow-right"></i></button>
+                    <button class="quiz-btn" id="resetQuizBtn"><i class="fas fa-sync-alt"></i> Refaire</button>
+                </div>
+                <div id="quizResult" class="result-area" style="display: none;"></div>
             </div>
         </div>
-        
+    </div>
+    <div class="footer-note">
+        <i class="fas fa-seedling"></i> Dar El Zit
     </div>
 </div>
 
 <script>
-    // 🔑 TA CLÉ API (valide)
-    const API_KEY = "AIzaSyD525OSp2MKkwZA46dwD1RAMwAjWLsEDI0";
-    // ✅ Utilisation du modèle gemini-2.5-flash
+    // ---------- REPLACE WITH YOUR NEW API KEY ----------
+    const API_KEY = "AIzaSyCm7r1rjw8rneY08s7A2lVN0-7YYcciKMI";
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
 
-    const askBtn = document.getElementById('askBtn');
-    const questionInput = document.getElementById('questionInput');
-    const answerDisplay = document.getElementById('answerDisplay');
+    // DOM elements
+    const chatMessagesDiv = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendChatBtn');
 
-    async function askGemini(question) {
-        if (!question.trim()) return "Veuillez écrire une question.";
+    function scrollChatBottom() {
+        chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+    }
 
-        answerDisplay.innerHTML = "🤔 Réflexion en cours...";
-        answerDisplay.parentElement.parentElement.classList.add('loading');
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/\n/g, '<br>');
+    }
+
+    function addMessage(role, text, isHtml = false) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${role}`;
+        const avatar = role === 'user' ? '<i class="fas fa-user-astronaut"></i>' : '<i class="fas fa-tree"></i>';
+        msgDiv.innerHTML = `
+            <div class="message-avatar">${avatar}</div>
+            <div class="message-bubble">${isHtml ? text : escapeHtml(text)}</div>
+        `;
+        chatMessagesDiv.appendChild(msgDiv);
+        scrollChatBottom();
+    }
+
+    function showTyping() {
+        const typingDiv = document.createElement('div');
+        typingDiv.id = 'typingIndicator';
+        typingDiv.className = 'message assistant';
+        typingDiv.innerHTML = `<div class="message-avatar"><i class="fas fa-tree"></i></div><div class="typing-indicator"><span></span><span></span><span></span></div>`;
+        chatMessagesDiv.appendChild(typingDiv);
+        scrollChatBottom();
+    }
+    function hideTyping() {
+        const el = document.getElementById('typingIndicator');
+        if (el) el.remove();
+    }
+
+    // New, friendlier system prompt: accepts greetings & small talk, but refuses completely unrelated topics (sports, politics, etc.)
+    async function getFriendlyAIResponse(question) {
+        if (!question.trim()) return "Dis-moi quelque chose, je t'écoute !";
+        const systemPrompt = `Tu es un expert en huile d'olive, mais aussi un compagnon chaleureux. Tu travailles pour Dar El Zit en Tunisie.
+RÈGLES :
+- Si l'utilisateur te dit bonjour, comment ça va, ou fait du small talk (météo, compliments, etc.), réponds de façon naturelle, amicale et courte. Tu peux ensuite rediriger vers l'huile d'olive si tu veux, mais ce n'est pas obligatoire.
+- Si l'utilisateur pose une question sur l'huile d'olive (extraction, qualité, conservation, dégustation, variétés, etc.), réponds avec précision, en 2 à 4 phrases, donne des chiffres clés (températures, acidité, etc.).
+- Si l'utilisateur parle d'un sujet TOTALEMENT ÉTRANGER à l'olive, à la cuisine méditerranéenne ou à l'alimentation (ex: sport, politique, actualités générales, technologie hors alimentation), alors réponds gentiment : "Désolé, je suis surtout calé sur l'huile d'olive et les bonnes choses de la vie. Mais je peux te parler d'olives, de dégustation ou de recettes si tu veux !"
+- Sois toujours poli, détendu, et utilise parfois des émojis.
+- Ton nom est Zitouni
+
+Question: ${question}`;
 
         try {
-            const prompt = `Tu es un expert professionnel en extraction d'huile d'olive, spécialiste du pressoir "Dar El Zit" en Tunisie. Réponds de manière TRÈS CONCISE, en 4 à 5 phrases , technique mais accessible, en français. Ne parle pas de consommation d'eau ni de déchets. Concentre-toi sur : les étapes (broyage, malaxage, séparation, filtration, stockage), les types de systèmes (2 phases, 3 phases, traditionnel), les réglages (température, durée), la qualité de l'huile (acidité, polyphénols), l'optimisation du rendement, la conservation. Question : ${question}`;
-
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }]
+                    contents: [{ parts: [{ text: systemPrompt }] }]
                 })
             });
-
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error?.message || "Erreur API");
+                const errData = await response.json();
+                throw new Error(errData.error?.message || "Erreur API");
             }
-
             const data = await response.json();
-            const answer = data.candidates[0].content.parts[0].text;
-            answerDisplay.innerHTML = answer.replace(/\n/g, '<br>');
+            let answer = data.candidates[0].content.parts[0].text;
+            return answer;
         } catch (error) {
             console.error(error);
-            answerDisplay.innerHTML = `❌ Erreur : ${error.message}<br><br>Vérifie ta clé API ou ta connexion internet.`;
-        } finally {
-            answerDisplay.parentElement.parentElement.classList.remove('loading');
+            return `❌ Oups, problème technique : ${error.message}. Vérifie ta clé API ou réessaie plus tard. 🌿`;
         }
     }
 
-    askBtn.addEventListener('click', () => {
-        askGemini(questionInput.value);
-        questionInput.value = "";
-    });
+    async function sendUserMessage() {
+        const question = chatInput.value.trim();
+        if (!question) return;
+        addMessage('user', question);
+        chatInput.value = '';
+        showTyping();
+        const reply = await getFriendlyAIResponse(question);
+        hideTyping();
+        addMessage('assistant', reply, true);
+    }
 
-    questionInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') askBtn.click();
-    });
+    sendBtn.addEventListener('click', sendUserMessage);
+    chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendUserMessage(); });
+
+    // ---------- QUIZ (unchanged, works perfectly) ----------
+    const quizData = [
+        { text: "🌡️ Quelle température idéale pour le malaxage (préservation des polyphénols) ?", options: ["10-15°C", "18-24°C", "27-32°C", "35-40°C"], correct: 1 },
+        { text: "🏺 Quel système d'extraction donne l'huile la plus riche en polyphénols ?", options: ["3 phases avec eau", "2 phases sans eau", "Pressoir en pierre", "Extraction solvant"], correct: 1 },
+        { text: "🔬 Acidité max pour une extra vierge premium ?", options: ["0,8%", "1,5%", "2,0%", "0,3%"], correct: 0 },
+        { text: "🍃 Quel défaut indique une mauvaise fermentation des olives ?", options: ["Amer", "Piquant", "Moisi/humide", "Fruité vert"], correct: 2 },
+        { text: "⏳ Meilleure conservation après extraction ?", options: ["Bouteille transparente au soleil", "Citerne inox + azote, obscurité", "Baril plastique", "Fût de chêne"], correct: 1 }
+    ];
+
+    let currentQIndex = 0;
+    let userAnswers = new Array(quizData.length).fill(null);
+    let quizCompleted = false;
+
+    const questionTextElem = document.getElementById('questionText');
+    const optionsListElem = document.getElementById('optionsList');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const resetQuizBtn = document.getElementById('resetQuizBtn');
+    const scoreDisplaySpan = document.getElementById('scoreDisplay');
+    const quizResultDiv = document.getElementById('quizResult');
+
+    function updateScoreDisplay() {
+        let score = 0;
+        for (let i = 0; i < quizData.length; i++) {
+            if (userAnswers[i] !== null && userAnswers[i] === quizData[i].correct) score++;
+        }
+        scoreDisplaySpan.innerText = `Score: ${score} / ${quizData.length}`;
+        return score;
+    }
+
+    function renderCurrentQuestion() {
+        if (quizCompleted) return;
+        const q = quizData[currentQIndex];
+        questionTextElem.innerText = q.text;
+        optionsListElem.innerHTML = '';
+        q.options.forEach((opt, idx) => {
+            const isChecked = (userAnswers[currentQIndex] === idx);
+            const optionDiv = document.createElement('div');
+            optionDiv.className = `option ${isChecked ? 'selected' : ''}`;
+            const radioId = `opt_${currentQIndex}_${idx}`;
+            optionDiv.innerHTML = `
+                <input type="radio" name="quizOption" value="${idx}" id="${radioId}" ${isChecked ? 'checked' : ''}>
+                <label for="${radioId}" style="flex:1; cursor:pointer;">${opt}</label>
+            `;
+            const radio = optionDiv.querySelector('input');
+            radio.addEventListener('change', () => {
+                if (radio.checked) {
+                    document.querySelectorAll('.option').forEach(el => el.classList.remove('selected'));
+                    optionDiv.classList.add('selected');
+                    userAnswers[currentQIndex] = idx;
+                    updateScoreDisplay();
+                }
+            });
+            optionDiv.addEventListener('click', (e) => {
+                if (e.target.tagName !== 'INPUT') {
+                    radio.checked = true;
+                    radio.dispatchEvent(new Event('change'));
+                }
+            });
+            optionsListElem.appendChild(optionDiv);
+        });
+        prevBtn.disabled = (currentQIndex === 0);
+        if (currentQIndex === quizData.length - 1) nextBtn.innerHTML = '🏆 Terminer';
+        else nextBtn.innerHTML = 'Suivant →';
+        quizResultDiv.style.display = 'none';
+    }
+
+    function showFinalResults() {
+        quizCompleted = true;
+        let score = 0;
+        let details = '';
+        for (let i = 0; i < quizData.length; i++) {
+            const isCorrect = (userAnswers[i] !== null && userAnswers[i] === quizData[i].correct);
+            if (isCorrect) score++;
+            const userChoice = userAnswers[i] !== null ? quizData[i].options[userAnswers[i]] : "Pas de réponse";
+            const correctAns = quizData[i].options[quizData[i].correct];
+            details += `<div style="margin-bottom:10px; border-bottom:1px solid #ddd6c6; padding-bottom:6px;"><strong>❓ ${quizData[i].text}</strong><br>✅ ${correctAns}<br>${isCorrect ? '✔️ Toi : ' + userChoice : '❌ Toi : ' + userChoice}</div>`;
+        }
+        const percent = Math.round((score/quizData.length)*100);
+        let medal = percent === 100 ? "🏆 MAÎTRE ABSOLU !" : (percent>=80 ? "🌟 Expert, presque parfait." : (percent>=60 ? "🍈 Bonne base !" : "🌿 Revois les bases avec l'IA."));
+        quizResultDiv.innerHTML = `<i class="fas fa-olive" style="font-size:1.5rem;"></i><h3>Score : ${score}/${quizData.length} (${percent}%)</h3><p>${medal}</p><div style="max-height:180px; overflow:auto; text-align:left; font-size:0.75rem;">${details}</div><button id="retakeQuizBtn" class="quiz-btn primary" style="margin-top:12px;">⟳ Refaire</button>`;
+        quizResultDiv.style.display = 'block';
+        questionTextElem.style.display = 'none';
+        optionsListElem.style.display = 'none';
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+        resetQuizBtn.style.display = 'none';
+        document.getElementById('retakeQuizBtn')?.addEventListener('click', () => resetQuiz());
+    }
+
+    function resetQuiz() {
+        userAnswers.fill(null);
+        currentQIndex = 0;
+        quizCompleted = false;
+        questionTextElem.style.display = 'block';
+        optionsListElem.style.display = 'flex';
+        prevBtn.style.display = 'inline-flex';
+        nextBtn.style.display = 'inline-flex';
+        resetQuizBtn.style.display = 'inline-flex';
+        quizResultDiv.style.display = 'none';
+        updateScoreDisplay();
+        renderCurrentQuestion();
+    }
+
+    function nextQuestion() {
+        if (quizCompleted) return;
+        if (currentQIndex < quizData.length - 1) { currentQIndex++; renderCurrentQuestion(); }
+        else showFinalResults();
+    }
+    function prevQuestion() { if (!quizCompleted && currentQIndex > 0) { currentQIndex--; renderCurrentQuestion(); } }
+
+    nextBtn.addEventListener('click', nextQuestion);
+    prevBtn.addEventListener('click', prevQuestion);
+    resetQuizBtn.addEventListener('click', resetQuiz);
+    resetQuiz();
 </script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </body>
 </html>

@@ -17,39 +17,14 @@
             font-family: 'Inter', sans-serif;
             padding: 12px;
             min-height: 100vh;
-            position: relative;
         }
-        body::before {
-            content: "🌿";
-            font-size: 220px;
-            position: fixed;
-            bottom: -30px;
-            right: -30px;
-            opacity: 0.08;
-            pointer-events: none;
-            transform: rotate(15deg);
-            color: #B6AB6D;
-        }
-        body::after {
-            content: "🫒";
-            font-size: 160px;
-            position: fixed;
-            top: -20px;
-            left: -20px;
-            opacity: 0.07;
-            pointer-events: none;
-            transform: rotate(-10deg);
-            color: #ADD6AB;
+        body::before, body::after {
+            display: none; /* simplification pour mobile, pas essentiel */
         }
         .dashboard {
             max-width: 1300px;
-            width: 100%;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            position: relative;
-            z-index: 2;
+            display: block; /* au lieu de grid, on laisse le flux normal */
         }
         /* Carte générique */
         .glass-card {
@@ -59,8 +34,7 @@
             box-shadow: 0 12px 25px -10px rgba(0,0,0,0.3);
             overflow: hidden;
             border: 1px solid rgba(182, 171, 109, 0.35);
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 20px;
         }
         .card-header {
             background: linear-gradient(135deg, #253224, #184709);
@@ -69,7 +43,6 @@
             align-items: center;
             gap: 10px;
             border-bottom: 2px solid #B6AB6D;
-            flex-shrink: 0;
         }
         .card-header i {
             font-size: 1.5rem;
@@ -88,16 +61,15 @@
             margin-left: auto;
             font-weight: 500;
         }
-        /* ========== CHATBOT : compact ========== */
+        /* ========== CHATBOT : compact mais visible ========== */
         .chat-messages {
-            flex: 1;
+            height: 45vh; /* hauteur fixe sur mobile pour forcer l'affichage */
             overflow-y: auto;
             padding: 10px 12px;
             display: flex;
             flex-direction: column;
             gap: 8px;
             background: #FAF5E2;
-            min-height: 280px; /* force une hauteur mini sur mobile */
         }
         .message {
             display: flex;
@@ -123,7 +95,7 @@
             padding: 6px 12px;
             border-radius: 18px;
             border-top-left-radius: 4px;
-            font-size: 1rem;
+            font-size: 0.8rem;
             line-height: 1.35;
             color: #1e2a1a;
             max-width: 85%;
@@ -144,7 +116,6 @@
             border-top: 1px solid #D9E0C5;
             display: flex;
             gap: 8px;
-            flex-shrink: 0;
         }
         .chat-input-area input {
             flex: 1;
@@ -153,11 +124,6 @@
             padding: 8px 14px;
             font-size: 0.8rem;
             background: white;
-        }
-        .chat-input-area input:focus {
-            border-color: #89C63D;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(137,198,61,0.2);
         }
         .chat-input-area button {
             background: #184709;
@@ -170,12 +136,10 @@
         }
         /* ========== QUIZ : très aéré ========== */
         .quiz-container {
-            flex: 1;
             padding: 20px 24px;
             background: #FAF5E2;
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
         }
         .quiz-header {
             display: flex;
@@ -268,9 +232,9 @@
         .footer-note {
             text-align: center;
             font-size: 0.65rem;
-            margin-top: 20px;
+            margin-top: 10px;
+            margin-bottom: 20px;
             color: #AAAA7F;
-            grid-column: span 2;
         }
         .typing-indicator {
             display: flex;
@@ -291,43 +255,36 @@
             0%, 100% { opacity: 0.3; }
             50% { opacity: 1; }
         }
-        /* ========== MOBILE : les deux cartes s'affichent parfaitement ========== */
-        @media (max-width: 850px) {
+        /* Desktop : deux colonnes */
+        @media (min-width: 850px) {
             .dashboard {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            body {
-                padding: 12px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
             }
             .glass-card {
-                height: auto !important;
-                display: flex !important;
-                flex-direction: column !important;
+                margin-bottom: 0;
+                height: 580px;
+                display: flex;
+                flex-direction: column;
             }
             .chat-messages {
-                min-height: 260px;
-                max-height: 400px;
+                height: auto;
+                flex: 1;
             }
             .quiz-container {
-                padding: 16px;
+                flex: 1;
+                overflow-y: auto;
             }
-            .question-text {
-                font-size: 1.2rem;
-            }
-            .option {
-                padding: 10px 16px;
-                font-size: 0.9rem;
-            }
-            .quiz-title {
-                font-size: 1.4rem;
+            body::before, body::after {
+                display: block;
             }
         }
     </style>
 </head>
 <body>
 <div class="dashboard">
-    <!-- CHATBOT CARD (compact) -->
+    <!-- CHATBOT CARD -->
     <div class="glass-card">
         <div class="card-header">
             <i class="fas fa-robot"></i>
@@ -346,7 +303,7 @@
         </div>
     </div>
 
-    <!-- QUIZ CARD (très aéré) -->
+    <!-- QUIZ CARD -->
     <div class="glass-card">
         <div class="card-header">
             <i class="fas fa-olive-branch"></i>
@@ -358,7 +315,7 @@
                 <div class="quiz-title">🍈 Maîtrise de l'olivier</div>
                 <div class="quiz-score-badge" id="scoreDisplay">Score: 0 / 5</div>
             </div>
-            <div id="quizDynamicArea" style="flex:1; display: flex; flex-direction: column;">
+            <div id="quizDynamicArea">
                 <div class="question-text" id="questionText"></div>
                 <div class="options-list" id="optionsList"></div>
                 <div class="quiz-buttons">

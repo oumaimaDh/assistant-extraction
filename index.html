@@ -333,9 +333,8 @@
 </div>
 
 <script>
-    // ---------- REMPLACE PAR TA VRAIE CLÉ API ----------
-    const API_KEY = "AIzaSyBPN9M9q2PjGa6tcNHbznkvPriRy8S7MDA";
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
+    // ---------- APPEL VIA CLOUDFLARE WORKER (clé cachée) ----------
+    const WORKER_URL = "https://gemini-proxy.oumaima-dhawadii.workers.dev/";
 
     const chatMessagesDiv = document.getElementById('chatMessages');
     const chatInput = document.getElementById('chatInput');
@@ -388,7 +387,7 @@
 - Sois détendu, utilise parfois des émojis.
 Question: ${question}`;
         try {
-            const response = await fetch(API_URL, {
+            const response = await fetch(WORKER_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ contents: [{ parts: [{ text: systemPrompt }] }] })
